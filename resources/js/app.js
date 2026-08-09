@@ -1,0 +1,2 @@
+import './bootstrap';
+document.addEventListener('DOMContentLoaded',()=>{const h=document.querySelector('.site-header'),b=document.querySelector('.menu-toggle');if(b)b.addEventListener('click',()=>{h.classList.toggle('open');b.setAttribute('aria-expanded',h.classList.contains('open'))});h?.querySelectorAll('.mobile-nav a').forEach(link=>link.addEventListener('click',()=>{h.classList.remove('open');b?.setAttribute('aria-expanded','false')}));});

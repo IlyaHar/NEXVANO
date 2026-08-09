@@ -1,0 +1,15 @@
+﻿User-agent: *
+Allow: /
+
+# Запрещаем индексацию системных папок (если у вас OpenCart, WordPress и т. д.)
+Disallow: /admin/
+Disallow: /wp-admin/
+Disallow: /cart/
+Disallow: /checkout/
+Disallow: /search/
+Disallow: /account/
+Disallow: /login/
+Disallow: /register/
+
+# Указываем путь к карте сайта
+Sitemap: https://seedup.com.ua/sitemap.xml

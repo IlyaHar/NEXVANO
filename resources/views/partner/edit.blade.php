@@ -1,0 +1,1 @@
+@extends('layouts.app') @section('content')<div class="admin-title"><h1>Редагувати партнера</h1></div><form class="admin-form" action="{{ route('partners.update',$partner) }}" method="POST" enctype="multipart/form-data">@csrf @method('PUT') @include('partner._form',['partner'=>$partner,'submitLabel'=>'Зберегти'])</form>@endsection

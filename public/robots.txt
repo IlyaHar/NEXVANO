@@ -1,0 +1,16 @@
+User-agent: *
+Allow: /
+
+Disallow: /dashboard
+Disallow: /profile
+Disallow: /login
+Disallow: /forgot-password
+Disallow: /reset-password
+Disallow: /confirm-password
+Disallow: /verify-email
+Disallow: /categories/create
+Disallow: /categories/*/edit
+Disallow: /products/create
+Disallow: /products/*/edit
+
+Sitemap: https://seedup.com.ua/sitemap.xml

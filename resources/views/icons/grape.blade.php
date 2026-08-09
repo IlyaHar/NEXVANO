@@ -1,0 +1,1 @@
+<svg viewBox="0 0 64 64"><path d="M34 17c4-8 10-11 19-9-2 9-8 13-19 9ZM33 17c-4-7-9-10-17-9M33 18v5"/><circle cx="25" cy="28" r="7"/><circle cx="39" cy="28" r="7"/><circle cx="18" cy="40" r="7"/><circle cx="32" cy="40" r="7"/><circle cx="46" cy="40" r="7"/><circle cx="25" cy="52" r="7"/><circle cx="39" cy="52" r="7"/></svg>

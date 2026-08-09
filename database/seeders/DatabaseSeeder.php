@@ -1,0 +1,25 @@
+<?php
+namespace Database\Seeders;
+use App\Models\Category;
+use App\Models\Product;
+use App\Models\User;
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
+class DatabaseSeeder extends Seeder {
+ public function run(): void {
+  $categories=collect([
+   ['slug'=>'oilseeds','name_uk'=>'Олійні культури','name_es'=>'Cultivos oleaginosos','description_uk'=>'Соняшник, ріпак, соя та інші культури.','description_es'=>'Girasol, colza, soja y otros cultivos.','icon'=>'sun','sort_order'=>1],
+   ['slug'=>'cereals','name_uk'=>'Зернові культури','name_es'=>'Cereales','description_uk'=>'Пшениця, ячмінь, кукурудза та інші зернові.','description_es'=>'Trigo, cebada, maíz y otros cereales.','icon'=>'grain','sort_order'=>2],
+   ['slug'=>'horticulture','name_uk'=>'Овочеві та баштанні','name_es'=>'Hortícolas','description_uk'=>'Точне живлення овочів і баштанних культур.','description_es'=>'Nutrición precisa para cultivos hortícolas.','icon'=>'sprout','sort_order'=>3],
+   ['slug'=>'orchards','name_uk'=>'Сади та виноградники','name_es'=>'Frutales y viñedos','description_uk'=>'Підтримка цвітіння, зав’язі та якості плодів.','description_es'=>'Apoyo a la floración, cuajado y calidad del fruto.','icon'=>'grape','sort_order'=>4],
+  ])->map(fn($c)=>Category::create($c));
+  $products=[
+   ['slug'=>'micro-complex','title_uk'=>'Nexvano Micro Complex','title_es'=>'Nexvano Micro Complex','subtitle_uk'=>'Повний комплекс макро- та мікроелементів','subtitle_es'=>'Complejo completo de macro y micronutrientes','description_uk'=>'Висококонцентроване рідке добриво з хелатованими мікроелементами, амінокислотами, гуміновими та бурштиновою кислотою. Покращує поглинання поживних речовин, розвиток коренів і стійкість до стресу.','description_es'=>'Fertilizante líquido concentrado con micronutrientes quelatados, aminoácidos y ácidos húmicos y succínico. Mejora la absorción, el desarrollo radicular y la resistencia al estrés.','benefits_uk'=>'Повноцінне живлення\nМаксимальне засвоєння\nСильна коренева система\nВища якість урожаю','benefits_es'=>'Nutrición completa\nMáxima absorción\nSistema radicular fuerte\nMayor calidad de cosecha','composition_uk'=>'N 35,1 г/л · P₂O₅ 43,3 г/л · K₂O 39 г/л · B 80 г/л · Zn 45 г/л · гумінові речовини 110 г/л','composition_es'=>'N 35,1 g/L · P₂O₅ 43,3 g/L · K₂O 39 g/L · B 80 g/L · Zn 45 g/L · sustancias húmicas 110 g/L','application_uk'=>'Позакоренево 0,7–2,0 л/га. Фертигація 2–6 л/га залежно від культури.','application_es'=>'Aplicación foliar 0,7–2,0 L/ha. Fertirrigación 2–6 L/ha según cultivo.','image'=>'images/brand/micro-complex-label.png','volume'=>'5 L','featured'=>true,'is_active'=>true,'sort_order'=>1],
+   ['slug'=>'bor','title_uk'=>'Nexvano Bor','title_es'=>'Nexvano Bor','subtitle_uk'=>'Бор для інтенсивного цвітіння та зав’язі','subtitle_es'=>'Boro para floración y cuajado intensivos','description_uk'=>'Концентрований бор у легкодоступній формі для підтримки генеративних органів, транспорту цукрів і рівномірного формування плодів.','description_es'=>'Boro concentrado y altamente disponible para apoyar los órganos reproductivos, el transporte de azúcares y la formación uniforme del fruto.','benefits_uk'=>'Краще запилення\nРівномірна зав’язь\nТранспорт цукрів\nСтійкість точок росту','benefits_es'=>'Mejor polinización\nCuajado uniforme\nTransporte de azúcares\nVigor de los meristemos','composition_uk'=>'Бор у біодоступній органічній формі.','composition_es'=>'Boro en forma orgánica biodisponible.','application_uk'=>'Застосовувати у фази перед цвітінням та формуванням зав’язі.','application_es'=>'Aplicar antes de la floración y durante el cuajado.','image'=>null,'volume'=>'5 L','featured'=>true,'is_active'=>true,'sort_order'=>2],
+   ['slug'=>'zn','title_uk'=>'Nexvano Zn','title_es'=>'Nexvano Zn','subtitle_uk'=>'Цинк для росту та ферментативної активності','subtitle_es'=>'Zinc para crecimiento y actividad enzimática','description_uk'=>'Швидкодоступний цинк для активації синтезу ауксинів, ферментів та інтенсивного стартового розвитку культури.','description_es'=>'Zinc de rápida disponibilidad para activar la síntesis de auxinas, enzimas y un desarrollo inicial vigoroso.','benefits_uk'=>'Активний старт\nСильні міжвузля\nКращий метаболізм\nВирівняні посіви','benefits_es'=>'Arranque vigoroso\nEntrenudos fuertes\nMejor metabolismo\nCultivos uniformes','composition_uk'=>'Хелатований цинк з органічним комплексоутворювачем.','composition_es'=>'Zinc quelatado con agente complejante orgánico.','application_uk'=>'Позакоренево у період активного вегетативного росту.','application_es'=>'Aplicación foliar durante el crecimiento vegetativo activo.','image'=>null,'volume'=>'5 L','featured'=>true,'is_active'=>true,'sort_order'=>3],
+  ];
+  foreach($products as $i=>$data){$p=Product::create($data);$p->categories()->sync($i===0?$categories->pluck('id'):$categories->pluck('id')->take(3));}
+  $this->call(DemoPartnerSeeder::class);
+  User::firstOrCreate(['email'=>'admin@nexvano.com'],['name'=>'Nexvano Admin','password'=>Hash::make('nexvano2026')]);
+ }
+}
