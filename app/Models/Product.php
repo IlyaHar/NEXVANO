@@ -5,7 +5,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Support\Facades\Storage;
 
 class Product extends Model
 {
@@ -26,7 +25,31 @@ class Product extends Model
         if (! $this->image) return null;
 
         return str_starts_with($this->image, 'images/')
-            ? asset($this->image)
-            : Storage::disk('public')->url($this->image);
+            ? '/'.ltrim($this->image, '/')
+            : route('product-images.show', ['path' => $this->image], false);
+    }
+
+    public static function textBlocks(?string $text): array
+    {
+        $text = trim(preg_replace("/\r\n?|\x{2028}|\x{2029}/u", "\n", (string) $text));
+        if ($text === '') return [];
+
+        $text = preg_replace('/\s+(?=[\x{1F300}-\x{1FAFF}])/u', "\n", $text);
+        $labels = [
+            'Вміст діючих компонентів', 'Склад (г/л маси)', 'Позакореневе підживлення', 'Обробка насіння',
+            'Рекомендовані фази внесення', 'Для максимальної ефективності', 'Спосіб застосування', 'Сумісність',
+            'Contenido de componentes activos', 'Composición', 'Aplicación foliar', 'Tratamiento de semillas', 'Fases recomendadas', 'Modo de aplicación', 'Compatibilidad',
+        ];
+        $labels = array_map(fn (string $label) => preg_quote($label, '/'), $labels);
+        $text = preg_replace('/\s+(?=(?:'.implode('|', $labels).')\s*:)/ui', "\n", $text);
+        $lines = preg_split('/\n+/', $text, -1, PREG_SPLIT_NO_EMPTY);
+        $blocks = [];
+
+        foreach ($lines as $line) {
+            $sentences = preg_split('/(?<=[.!?])\s+(?=[\p{Lu}\p{Lt}\x{1F300}-\x{1FAFF}])/u', trim($line), -1, PREG_SPLIT_NO_EMPTY);
+            array_push($blocks, ...$sentences);
+        }
+
+        return array_values(array_filter(array_map('trim', $blocks)));
     }
 }

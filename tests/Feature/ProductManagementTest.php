@@ -52,7 +52,28 @@ class ProductManagementTest extends TestCase
         $this->get(route('products.show', $product))
             ->assertOk()
             ->assertSee($product->image_url, false)
-            ->assertSee('class="formatted-text"', false);
+            ->assertSee('class="structured-text product-description"', false)
+            ->assertSee('<p>Перший абзац.</p>', false)
+            ->assertSee('<p>Другий абзац.</p>', false);
+
+        $this->get($product->image_url)
+            ->assertOk()
+            ->assertHeader('cache-control', 'immutable, max-age=31536000, public');
+    }
+
+    public function test_single_line_product_copy_is_split_into_readable_blocks(): void
+    {
+        $this->assertSame([
+            'Перше речення.',
+            'Друге речення.',
+            '🌻 Соняшник: 1–2 л/га',
+        ], Product::textBlocks('Перше речення. Друге речення. 🌻 Соняшник: 1–2 л/га'));
+
+        $this->assertSame([
+            'Зернові культури',
+            'Позакореневе підживлення: 0,7–1,5 л/га',
+            'Обробка насіння: 1,0 л/т',
+        ], Product::textBlocks('Зернові культури Позакореневе підживлення: 0,7–1,5 л/га Обробка насіння: 1,0 л/т'));
     }
 
     private function productData(array $overrides = []): array
